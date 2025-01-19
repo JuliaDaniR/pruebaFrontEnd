@@ -1,0 +1,42 @@
+// src/pages/LandingPage.tsx
+import React from 'react';
+import logo from '../assets/img/logo-box.svg';
+import RedirectButton from '../components/RedirectButton';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import BackendHealthCheck from '../components/BackendHealthCheck'; // Importa el nuevo componente
+
+const mainContainer = "flex flex-col min-h-screen bg-zinc-50"; 
+const contentContainer = "flex flex-col items-center justify-center flex-grow"; 
+const buttonsContainer = "flex flex-col justify-center bg-sky-500 px-20 py-10 rounded-[5px]"
+
+const LandingPage: React.FC = () => {
+  return (
+    <div className={mainContainer}>
+      <Header />
+
+      <div className={contentContainer}>
+        <div className='flex align-middle'>
+          <img src={logo} alt="logo box" className='h-[70px] fill-sky-500' />
+          <h1 className="font-sans font-medium text-6xl mb-8 text-sky-500">
+            Class<span className='text-orange-400 italic'>Kit</span>
+          </h1>
+        </div>
+
+        {/* Componente de prueba de conexión al backend */}
+        <BackendHealthCheck />
+
+        <div className={buttonsContainer}>
+          <RedirectButton to={'/register'}>Registrarse</RedirectButton>
+          <RedirectButton to={'/login'}>Login</RedirectButton>
+        </div>
+      </div>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default LandingPage;
+
+
