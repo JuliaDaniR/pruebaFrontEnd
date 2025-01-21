@@ -16,3 +16,4 @@ const AboutModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 };
 
 export default AboutModal;
+
