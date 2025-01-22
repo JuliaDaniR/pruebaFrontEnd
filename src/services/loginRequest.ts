@@ -8,7 +8,7 @@ const loginRequest = async (
 ): Promise<LoginResponse> => {
 	try {
 		const response = await axios.post<LoginResponse>(
-			'http://localhost:8080/login',
+			'https://class-kit-backend.onrender.com/login',
 			loginData,
 		);
 
