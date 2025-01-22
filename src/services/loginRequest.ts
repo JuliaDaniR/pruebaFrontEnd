@@ -8,7 +8,7 @@ const loginRequest = async (
 ): Promise<LoginResponse> => {
 	try {
 		const response = await axios.post<LoginResponse>(
-			'https://class-kit-backend.onrender.com/login',
+			`${import.meta.env.VITE_BACKEND_URL}/login`,
 			loginData,
 		);
 
