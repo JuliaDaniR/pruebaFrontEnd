@@ -5,13 +5,13 @@ import { NavbarSandwich } from './NavbarSandwich';
 import clsx from 'clsx';
 
 const Navbar: React.FC = () => {
-  const experimentalClasses = `
+  /*const experimentalClasses = `
     sm:bg-red-500
     md:bg-yellow-500
     lg:bg-green-500
     xl:bg-violet-500
     2xl:bg-orange-500
-  `;
+  `;*/
 
   const navbarClasses = `
     bg-sky-500
