@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Route } from '../../../helpers/Route'
-import { UseGetMenuRoutesForRoleUser } from '../../../helpers/hooks/UseGetMenuRoutesForRoleUser'
+import { UseGetMenuRoutesForRoleUser } from '../../../helpers/hooks/useGetMenuRoutesForRoleUser'
 import { UseGetMenuRoutes } from '../../../helpers/hooks/useGetMenuRoutes'
 
 interface NavbarSandwichMenuProps {

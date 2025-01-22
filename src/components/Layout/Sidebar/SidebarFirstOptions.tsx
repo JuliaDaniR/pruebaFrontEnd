@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Route } from '../../../helpers/Route'
-import { UseGetMenuRoutesForRoleUser } from '../../../helpers/hooks/UseGetMenuRoutesForRoleUser'
+import { UseGetMenuRoutesForRoleUser } from '../../../helpers/hooks/useGetMenuRoutesForRoleUser'
 import { useNavigate } from 'react-router-dom'
 
 interface SidebarFirstOptionsProps {
