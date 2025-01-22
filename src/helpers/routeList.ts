@@ -3,7 +3,7 @@ import { AdminDashboard } from '../pages/AdminDashboard/AdminDashboard';
 import { TeacherDashboard } from '../pages/TeacherDashboard';
 import { Users } from '../pages/Users/Users';
 import { Inventory } from '../pages/Inventory/Inventory';
-import { AddEditUsers } from '../pages/AddEditUsers/AddEditUsers';
+import { AddEditUsers } from '../pages/AddEditUsers/AddeditUsers';
 import { AddEditDevice } from '../pages/AddEditDevice/AddEditDevice';
 import { SearchDevices } from '../pages/SearchDevices/SearchDevices';
 import { CheckReservations } from '../pages/CheckReservations/CheckReservations';
