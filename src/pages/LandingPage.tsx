@@ -3,6 +3,7 @@ import logo from '/logo-box.svg';
 import RedirectButton from '../components/RedirectButton';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import BackendHealthCheck from '../components/BackendHealthCheck';
 
 const mainContainer = 'flex flex-col min-h-screen bg-zinc-50';
 const contentContainer = 'flex flex-col items-center justify-center flex-grow';
@@ -13,7 +14,7 @@ const LandingPage: React.FC = () => {
 	return (
 		<div className={mainContainer}>
 			<Header />
-
+     
 			<div className={contentContainer}>
 				<div className='flex align-middle'>
 					<img src={logo} alt='logo box' className='h-[70px] fill-sky-500' />
@@ -21,7 +22,7 @@ const LandingPage: React.FC = () => {
 						Class<span className='text-orange-400 italic'>Kit</span>
 					</h1>
 				</div>
-
+				<BackendHealthCheck/>
 				<div className={buttonsContainer}>
 					<RedirectButton to={'/register'}>Registrarse</RedirectButton>
 					<RedirectButton to={'/login'}>Login</RedirectButton>

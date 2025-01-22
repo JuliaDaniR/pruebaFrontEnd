@@ -3,12 +3,14 @@ import Swal from 'sweetalert2';
 import { LoginResponse, UserCredentials } from '../context/user';
 import { getErrorMessage } from '../utils/error';
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 const loginRequest = async (
 	loginData: UserCredentials,
 ): Promise<LoginResponse> => {
 	try {
 		const response = await axios.post<LoginResponse>(
-			`${import.meta.env.VITE_BACKEND_URL}/login`,
+			`${backendUrl}/login`,
 			loginData,
 		);
 
