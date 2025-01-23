@@ -1,0 +1,11 @@
+select {
+  color: #a1a1a1; /* Gris claro, como los placeholders */
+}
+
+select:valid {
+  color: #000; /* Cambia a negro cuando se selecciona una opción válida */
+}
+
+select option[value=""] {
+  color: #a1a1a1; /* Placeholder de la primera opción */
+}

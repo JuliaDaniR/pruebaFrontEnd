@@ -1,24 +1,17 @@
-export const validateForm = (formData: {
-  fullName: string;
-  dni: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  cue: string;
-  institution: string;
-  institutionType: string;
-  educationLevel: string;
-  address: string;
-  phone: string;
-  website: string;
-}): string | null => {
-  const { fullName, dni, email, password, confirmPassword, cue, institution, institutionType, educationLevel, address, phone, website } = formData;
+import { UserRegister } from '../models/UserRegister';
 
-  if (!fullName.trim()) {
+export const validateForm = (
+  {
+    address, cue, dniAdmin, educational_level,
+    email, email_admin, full_name_admin, name,
+    phone, website, password2_admin, password_admin,
+  }: UserRegister,
+): string | null => {
+  if (!full_name_admin.trim()) {
     return 'El nombre completo es obligatorio';
   }
 
-  if (!dni.trim() || dni.length !== 8 || !/^\d+$/.test(dni)) {
+  if (!dniAdmin.trim() || dniAdmin.length !== 8 || !/^\d+$/.test(dniAdmin)) {
     return 'El DNI es obligatorio y debe tener 8 caracteres numéricos';
   }
 
@@ -26,11 +19,15 @@ export const validateForm = (formData: {
     return 'El email es obligatorio y debe tener un formato válido';
   }
 
-  if (!password.trim() || password.length < 8 || !/[A-Za-z]/.test(password) || !/\d/.test(password) || !/[!@#$%^&*]/.test(password)) {
+  if (!email_admin.trim() || !/\S+@\S+\.\S+/.test(email)) {
+    return 'El email es obligatorio y debe tener un formato válido';
+  }
+
+  if (!password_admin || !password_admin.trim() || password_admin.length < 8 || !/[A-Za-z]/.test(password_admin) || !/\d/.test(password_admin) || !/[!@#$%^&*]/.test(password_admin)) {
     return 'La contraseña es obligatoria y debe tener al menos 8 caracteres, incluyendo letras, números y caracteres especiales';
   }
 
-  if (password !== confirmPassword) {
+  if (password_admin !== password2_admin) {
     return 'Las contraseñas no coinciden';
   }
 
@@ -38,15 +35,11 @@ export const validateForm = (formData: {
     return 'El CUE es obligatorio y debe contener solo números';
   }
 
-  if (!institution.trim()) {
+  if (!name.trim()) {
     return 'La institución es obligatoria';
   }
 
-  if (!institutionType.trim()) {
-    return 'El tipo de institución es obligatorio';
-  }
-
-  if (!educationLevel.trim()) {
+  if (!educational_level.trim()) {
     return 'El nivel educativo es obligatorio';
   }
 

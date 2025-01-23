@@ -3,59 +3,41 @@ import Swal from 'sweetalert2';
 import { LoginResponse, UserCredentials } from '../context/user';
 import { getErrorMessage } from '../utils/error';
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const loginRequest = async (
+	loginData: UserCredentials,
+): Promise<LoginResponse> => {
+	try {
+		const response = await axios.post<LoginResponse>(
+			'http://localhost:8080/login',
+			loginData,
+		);
 
-if (!backendUrl) {
-    throw new Error('La URL del backend no está configurada.');
-}
+		Swal.fire({
+			icon: 'success',
+			title: 'Inicio de sesión exitoso',
+			text: `Bienvenido, ${response.data.name}!`,
+			timer: 3000,
+			showConfirmButton: false,
+		});
 
-const api = axios.create({
-    baseURL: backendUrl,
-    timeout: 25000, // Asegúrate de que el tiempo de espera sea suficiente
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    withCredentials: true, // Necesario si trabajas con cookies o tokens
-});
+		return response.data;
+	} catch (error: unknown) {
+		let errorMessage = 'Ocurrió un error desconocido.';
 
-const showAlert = (type: 'success' | 'error', title: string, text: string) => {
-    Swal.fire({
-        icon: type,
-        title,
-        text,
-        timer: type === 'success' ? 3000 : undefined,
-        showConfirmButton: type !== 'success',
-    });
-};
+		if (axios.isAxiosError(error) && error.response) {
+			errorMessage = getErrorMessage(error.response.status);
+		} else if (error instanceof Error) {
+			errorMessage = error.message;
+		}
 
-const loginRequest = async (loginData: UserCredentials): Promise<LoginResponse> => {
-    try {
-        console.log(backendUrl)
-        const response = await api.post<LoginResponse>('/aut/login', loginData);
+		Swal.fire({
+			icon: 'error',
+			title: 'Error al iniciar sesión',
+			text: errorMessage,
+		});
 
-        if (!response.data || typeof response.data.name !== 'string') {
-            throw new Error('La respuesta del servidor no tiene el formato esperado.');
-        }
-
-        showAlert('success', 'Inicio de sesión exitoso', `Bienvenido, ${response.data.name}!`);
-        return response.data;
-
-    } catch (error: unknown) {
-        let errorMessage = 'Ocurrió un error desconocido.';
-
-        if (axios.isAxiosError(error)) {
-            if (error.response) {
-                errorMessage = getErrorMessage(error.response.status) || 'Error inesperado del servidor.';
-            } else {
-                errorMessage = 'Error de red o timeout.';
-            }
-        } else if (error instanceof Error) {
-            errorMessage = error.message;
-        }
-
-        showAlert('error', 'Error al iniciar sesión', errorMessage);
-        throw new Error(errorMessage);
-    }
+		throw new Error(errorMessage);
+	}
 };
 
 export default loginRequest;

@@ -26,4 +26,3 @@ const UseGetCurrentUser = ({ onUpdateUser }: UseGetCurrentUserProps) => {
 };
 
 export { UseGetCurrentUser };
-

@@ -1,44 +1,44 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Route } from '../../../helpers/Route'
-import { UseGetMenuRoutesForRoleUser } from '../../../helpers/hooks/useGetMenuRoutesForRoleUser'
-import { UseGetMenuRoutes } from '../../../helpers/hooks/useGetMenuRoutes'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Route } from '../../../helpers/Route';
+import { UseGetMenuRoutesForRoleUser } from '../../../helpers/hooks/useGetMenuRoutesForRoleUser';
+import { UseGetMenuRoutes } from '../../../helpers/hooks/useGetMenuRoutes';
 
 interface NavbarSandwichMenuProps {
-	onToggleMenu: (value: false) => void
+	onToggleMenu: (value: false) => void;
 }
 
 const optionClasses = `
   border-b border-gray-400 text-black py-3 text-center
-`
+`;
 
 const NavbarSandwichMenu = ({ onToggleMenu }: NavbarSandwichMenuProps) => {
-	const navigate = useNavigate()
-	const getMenuRoutesForRoleUser = UseGetMenuRoutesForRoleUser
-	const getMenuRoutes = UseGetMenuRoutes
+	const navigate = useNavigate();
+	const getMenuRoutesForRoleUser = UseGetMenuRoutesForRoleUser;
+	const getMenuRoutes = UseGetMenuRoutes;
 
-	const [roleRoutes, setRoleRoutes] = useState<Route[]>([])
-	const [loggedRoutes, setLoggedRoutes] = useState<Route[]>([])
+	const [roleRoutes, setRoleRoutes] = useState<Route[]>([]);
+	const [loggedRoutes, setLoggedRoutes] = useState<Route[]>([]);
 
 	const handleRoleRoutesUpdate = (newRoutes: Route[]) => {
-		setRoleRoutes(newRoutes)
-	}
+		setRoleRoutes(newRoutes);
+	};
 	const handleLoggedRoutesUpdate = (newRoutes: Route[]) => {
-		setLoggedRoutes(newRoutes)
-	}
+		setLoggedRoutes(newRoutes);
+	};
 
-	getMenuRoutesForRoleUser({ onUpdateRoutes: handleRoleRoutesUpdate })
+	getMenuRoutesForRoleUser({ onUpdateRoutes: handleRoleRoutesUpdate });
 	getMenuRoutes({
 		menuType: 'logged',
 		onUpdateRoutes: handleLoggedRoutesUpdate,
-	})
+	});
 
 	const onClickCloseMenu = () => {
-		onToggleMenu(false)
-	}
+		onToggleMenu(false);
+	};
 	const onClickRoute = (path: string) => {
-		navigate(path)
-	}
+		navigate(path);
+	};
 
 	return (
 		<React.Fragment>
@@ -76,7 +76,7 @@ const NavbarSandwichMenu = ({ onToggleMenu }: NavbarSandwichMenuProps) => {
 								onClick={() => onClickRoute(route.path)}>
 								<a className='block'>{route.name}</a>
 							</div>
-						)
+						);
 					})}
 					<div className={optionClasses}>
 						<a className='block'>Salir</a>
@@ -84,7 +84,7 @@ const NavbarSandwichMenu = ({ onToggleMenu }: NavbarSandwichMenuProps) => {
 				</div>
 			</div>
 		</React.Fragment>
-	)
-}
+	);
+};
 
-export { NavbarSandwichMenu }
+export { NavbarSandwichMenu };
