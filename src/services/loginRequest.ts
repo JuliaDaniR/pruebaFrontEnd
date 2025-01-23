@@ -11,7 +11,11 @@ if (!backendUrl) {
 
 const api = axios.create({
     baseURL: backendUrl,
-    timeout: 25000, // 5 segundos
+    timeout: 25000, // Asegúrate de que el tiempo de espera sea suficiente
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    withCredentials: true, // Necesario si trabajas con cookies o tokens
 });
 
 const showAlert = (type: 'success' | 'error', title: string, text: string) => {
