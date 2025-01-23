@@ -23,7 +23,7 @@ const registerRequest = async (
       icon: 'success',
       title: 'Registro exitoso',
       text: `Bienvenido, ${response.data.name}!`,
-      timer: 3000,
+      timer: 23000,
       showConfirmButton: false,
     });
 

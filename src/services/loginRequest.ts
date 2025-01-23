@@ -22,7 +22,7 @@ const loginRequest = async (
       icon: 'success',
       title: 'Inicio de sesión exitoso',
       text: `Bienvenido, ${response.data.name}!`,
-      timer: 3000,
+      timer: 23000,
       showConfirmButton: false,
     });
 
