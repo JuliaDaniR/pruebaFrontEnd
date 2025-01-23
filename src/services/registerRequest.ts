@@ -4,12 +4,14 @@ import { RegisterResponse } from '../context/register';
 import { getErrorMessage } from '../utils/error';
 import { UserRegister } from '../models/UserRegister';
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL; // Usando la variable de entorno
+
 const registerRequest = async (
   userRegisterInFormData: UserRegister,
 ): Promise<RegisterResponse> => {
   try {
     const response = await axios.post<RegisterResponse>(
-      'http://localhost:8080/institution/register',
+      `${backendUrl}/institution/register`, // Usando la variable backendUrl
       { ...userRegisterInFormData },
     );
 
