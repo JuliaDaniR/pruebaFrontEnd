@@ -1,4 +1,4 @@
-/*import axios from 'axios';
+import axios from 'axios';
 import Swal from 'sweetalert2';
 import { LoginResponse, UserCredentials } from '../context/user';
 import { getErrorMessage } from '../utils/error';
@@ -10,7 +10,7 @@ const loginRequest = async (
 ): Promise<LoginResponse> => {
     try {
         const response = await axios.post<LoginResponse>(
-            `${backendUrl}/login`,
+            `${backendUrl}/aut/login`,
             loginData
         );
 
@@ -57,70 +57,4 @@ const loginRequest = async (
     }
 };
 
-export default loginRequest;*/
-
-import Swal from 'sweetalert2';
-import { LoginResponse, UserCredentials } from '../context/user';
-
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-const loginRequest = async (
-    loginData: UserCredentials,
-): Promise<LoginResponse> => {
-    try {
-        // Usamos fetch para la solicitud POST
-        const response = await fetch(`${backendUrl}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(loginData),
-        });
-
-        if (!response.ok) {
-            // Si la respuesta no es 2xx, lanza un error
-            throw new Error(`Error al conectar con el servidor: ${response.statusText}`);
-        }
-
-        // Parseamos el cuerpo de la respuesta
-        const data: LoginResponse = await response.json();
-
-        // Si la respuesta tiene datos, maneja el éxito
-        if (data) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Inicio de sesión exitoso',
-                text: `Bienvenido, ${data.name}!`,
-                timer: 3000,
-                showConfirmButton: false,
-            });
-
-            return data;  // Retorna los datos de login
-        }
-
-        throw new Error('Respuesta vacía del servidor');
-    } catch (error: unknown) {
-        let errorMessage = 'Ocurrió un error desconocido.';
-
-        // Depurar el error para ver si hay algo más que capturar
-        console.error(error);
-
-        // Manejar errores de la red
-        if (error instanceof Error) {
-            errorMessage = error.message;
-        }
-
-        // Mostrar mensaje de error
-        Swal.fire({
-            icon: 'error',
-            title: 'Error al iniciar sesión',
-            text: errorMessage,
-        });
-
-        // Lanza un nuevo error para propagarlo si es necesario
-        throw new Error(errorMessage);
-    }
-};
-
 export default loginRequest;
-

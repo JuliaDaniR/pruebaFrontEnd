@@ -11,8 +11,8 @@ const BackendHealthCheck: React.FC = () => {
       try {
         // Construir la URL completa
         const response = await fetch(`${backendUrl}/api/health`);
-
         if (response.ok) {
+          console.log("Responsee "+ response);
           const responseData = await response.text();
           setStatus('Conexión exitosa');
           setMessage(responseData);
