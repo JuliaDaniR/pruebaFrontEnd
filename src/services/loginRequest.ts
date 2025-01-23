@@ -5,39 +5,42 @@ import { getErrorMessage } from '../utils/error';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-const loginRequest = async (
-    loginData: UserCredentials,
-): Promise<LoginResponse> => {
+if (!backendUrl) {
+    throw new Error('La URL del backend no está configurada.');
+}
+
+const api = axios.create({
+    baseURL: backendUrl,
+    timeout: 5000, // 5 segundos
+});
+
+const showAlert = (type: 'success' | 'error', title: string, text: string) => {
+    Swal.fire({
+        icon: type,
+        title,
+        text,
+        timer: type === 'success' ? 3000 : undefined,
+        showConfirmButton: type !== 'success',
+    });
+};
+
+const loginRequest = async (loginData: UserCredentials): Promise<LoginResponse> => {
     try {
-        const response = await axios.post<LoginResponse>(
-            `${backendUrl}/aut/login`,
-            loginData
-        );
+        const response = await api.post<LoginResponse>('/aut/login', loginData);
 
-        // Si la respuesta tiene un cuerpo, maneja el éxito
-        if (response && response.data) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Inicio de sesión exitoso',
-                text: `Bienvenido, ${response.data.name}!`,
-                timer: 3000,
-                showConfirmButton: false,
-            });
-
-            return response.data;  // Retorna los datos de login
+        if (!response.data || typeof response.data.name !== 'string') {
+            throw new Error('La respuesta del servidor no tiene el formato esperado.');
         }
 
-        throw new Error('Respuesta vacía del servidor');
+        showAlert('success', 'Inicio de sesión exitoso', `Bienvenido, ${response.data.name}!`);
+        return response.data;
+
     } catch (error: unknown) {
         let errorMessage = 'Ocurrió un error desconocido.';
 
-        // Depurar el error para ver si hay algo más que capturar
-        console.error(error);
-
         if (axios.isAxiosError(error)) {
-            // Verificar si la respuesta existe y manejar el error
             if (error.response) {
-                errorMessage = getErrorMessage(error.response.status);
+                errorMessage = getErrorMessage(error.response.status) || 'Error inesperado del servidor.';
             } else {
                 errorMessage = 'Error de red o timeout.';
             }
@@ -45,14 +48,7 @@ const loginRequest = async (
             errorMessage = error.message;
         }
 
-        // Mostrar mensaje de error
-        Swal.fire({
-            icon: 'error',
-            title: 'Error al iniciar sesión',
-            text: errorMessage,
-        });
-
-        // Lanza un nuevo error para propagarlo si es necesario
+        showAlert('error', 'Error al iniciar sesión', errorMessage);
         throw new Error(errorMessage);
     }
 };
