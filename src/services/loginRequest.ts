@@ -26,6 +26,7 @@ const showAlert = (type: 'success' | 'error', title: string, text: string) => {
 
 const loginRequest = async (loginData: UserCredentials): Promise<LoginResponse> => {
     try {
+        console.log(backendUrl)
         const response = await api.post<LoginResponse>('/aut/login', loginData);
 
         if (!response.data || typeof response.data.name !== 'string') {
