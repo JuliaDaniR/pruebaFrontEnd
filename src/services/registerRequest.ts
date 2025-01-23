@@ -9,8 +9,14 @@ const registerRequest = async (
 ): Promise<RegisterResponse> => {
   try {
     const response = await axios.post<RegisterResponse>(
-      'https://class-kit-backend.onrender.com/institution/register',
+      'https://class-kit-backend.onrender.com/institution/register', // URL completa del backend
       { ...userRegisterInFormData },
+      {
+        headers: {
+          'Content-Type': 'application/json', // Configura el tipo de contenido
+        },
+        withCredentials: true, // Habilita el envío de cookies si el backend lo requiere
+      },
     );
 
     Swal.fire({
