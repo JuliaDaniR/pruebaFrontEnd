@@ -18,6 +18,9 @@ const loginRequest = async (
       },
     );
 
+    // Almacenar el token en el almacenamiento local (o estado)
+    localStorage.setItem('jwtToken', response.data.jwtToken);
+
     Swal.fire({
       icon: 'success',
       title: 'Inicio de sesión exitoso',

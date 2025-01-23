@@ -8,12 +8,15 @@ const registerRequest = async (
   userRegisterInFormData: UserRegister,
 ): Promise<RegisterResponse> => {
   try {
+    const token = localStorage.getItem('jwtToken'); // Recuperar el token desde el almacenamiento local
+
     const response = await axios.post<RegisterResponse>(
       'https://class-kit-backend.onrender.com/institution/register', // URL completa del backend
       { ...userRegisterInFormData },
       {
         headers: {
           'Content-Type': 'application/json', // Configura el tipo de contenido
+          'Authorization': `Bearer ${token}`, // Enviar el token en el encabezado
         },
         withCredentials: true, // Habilita el envío de cookies si el backend lo requiere
       },
