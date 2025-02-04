@@ -1,19 +1,21 @@
-import { GenericCard, GenericCardWithoutOnDelete } from '../../components/GenericCard/GenericCard';
+import { GenericCard } from '../../components/GenericCard/GenericCard';
+import { Device } from '../../models/Device';
 
 interface InventoryCardGridProps {
-  cards: GenericCardWithoutOnDelete[];
+  cards: Device[];
+  onDeleteDevice: (id: number) => void;
 }
 
-const handleDeleteCard = (
-  itemKeyToDelete: number
-) => {
-  // Delete Logic
-  console.log(itemKeyToDelete);
-}
 
 const InventoryCardGrid = (
-  { cards }: InventoryCardGridProps
+  { cards, onDeleteDevice }: InventoryCardGridProps
 ) => {
+  const handleDeleteCard = (
+    itemKeyToDelete: number
+  ) => {
+    onDeleteDevice(itemKeyToDelete);
+  }
+
   return (
     <>
       <div className='
@@ -26,20 +28,22 @@ const InventoryCardGrid = (
           cards.map(card => {
             return (
               <GenericCard
-                key={card.itemKey}
-                itemKey={card.itemKey}
+                key={card.id}
+                itemKey={card.id || 0}
                 description={card.description}
-                redirectToEditPathString={card.redirectToEditPathString}
-                title={card.title}
+                redirectToEditPathString={`/edit-device/${card.id}`}
+                title={card.name}
                 onDeleteEvent={handleDeleteCard}
               />
             )
           })
         }
-        
+
       </div>
     </>
   )
 }
 
-export default InventoryCardGrid
+export {
+  InventoryCardGrid,
+}

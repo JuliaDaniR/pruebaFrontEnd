@@ -1,7 +1,8 @@
+/* Estilos Select / Register.tsx */
 select {
   color: #a1a1a1; /* Gris claro, como los placeholders */
 }
-
+  
 select:valid {
   color: #000; /* Cambia a negro cuando se selecciona una opción válida */
 }
@@ -9,3 +10,98 @@ select:valid {
 select option[value=""] {
   color: #a1a1a1; /* Placeholder de la primera opción */
 }
+  
+
+/* Estilos Swal.fire / loginRequest.ts */
+/* Éxito */
+
+/* LOGO CHECK */
+.swal2-success-ring{
+  border-color: #0ea5e9 !important;
+}
+.swal2-success-line-tip,
+.swal2-success-line-long{
+  background-color: #0ea5e9 !important;
+}
+/* LOGO CHECK */
+.swal-popup-success {
+	background-color: #ffffff;
+	border: 4px solid #0ea5e9;
+  border-radius: 15px;
+}
+.swal-title-success {
+	color: #0ea5e9;
+	font-family: 'Arial', sans-serif;
+}
+.swal-confirm-button-success {
+	background-color: #0ea5e9;
+  width: 150px;
+	color: white;
+	font-size: 18px;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.swal-confirm-button-success:hover {
+	background-color: #0ea5e9;
+}
+
+/* Ícono personalizado */
+.swal-icon-success {
+	font-size: 20px;
+}
+
+/* Error */
+
+/* LOGO ERROR */
+.swal2-error{
+  border-color: #fb923c !important;
+}
+.swal2-x-mark-line-right,
+.swal2-x-mark-line-left{
+  background: #fb923c !important;
+}
+/* LOGO ERROR */
+
+.swal-popup-error {
+	background-color: #ffffff;
+	border: 4px solid #0ea5e9;
+  border-radius: 15px;
+}
+.swal-title-error {
+	color: #fb923c;
+	font-family: 'Arial', sans-serif;
+}
+.swal-confirm-button-error {
+	background-color: #0ea5e9;
+  width: 150px;
+	color: white;
+	font-size: 18px;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.swal-confirm-button-error:hover {
+	background-color: #0ea5e9;
+}
+
+/* Ícono personalizado */
+.swal-icon-error {
+	font-size: 20px;
+}
+
+
+/* Logout */
+
+.custom-swal-popup {
+	background-color: #ffffff;
+	border: 4px solid #0ea5e9;
+	border-radius: 15px;
+  }
+  

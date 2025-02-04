@@ -16,4 +16,5 @@ export interface LoginResponse {
 	jwtToken: string;
 	name: string;
 	role: 'TEACHER' | 'USER' | 'ADMIN';
+	dni: string;
 }

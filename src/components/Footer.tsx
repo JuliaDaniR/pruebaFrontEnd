@@ -1,6 +1,6 @@
 import React from "react";
 
-const footerMainContainer = "bg-sky-500 text-white py-1 flex justify-center";
+const footerMainContainer = "bg-sky-500 text-white py-1 flex justify-center text-lg";
 
 const Footer: React.FC = () => {
     return(

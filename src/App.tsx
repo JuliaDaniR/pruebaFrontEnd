@@ -12,8 +12,8 @@ import PrivateRoute from './routes/PrivateRoute'; // Importar el componente Priv
 
 const App: React.FC = () => {
 	return (
-		<UserProvider>
-			<Router>
+		<Router>
+			<UserProvider>
 				<Routes>
 					{/* Rutas públicas */}
 					<Route path='/' element={<LandingPage />} />
@@ -35,8 +35,8 @@ const App: React.FC = () => {
 						))}
 					</Route>
 				</Routes>
-			</Router>
-		</UserProvider>
+			</UserProvider>
+		</Router>
 	);
 };
 

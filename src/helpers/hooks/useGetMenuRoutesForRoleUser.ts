@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Route } from '../Route';
 import { ExperimentalUser } from '../../models/ExperimentalUser';
-import { UseGetCurrentUser } from './useGetCurrentUser';
+import { UseGetCurrentUser } from './useGetCurrentUserExperimental';
 import { UseGetMenuRoutes } from './useGetMenuRoutes';
 
 interface UseGetMenuRoutesForRoleUserProps {

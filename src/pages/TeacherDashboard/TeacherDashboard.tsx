@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { useAuthProvider } from '../../context/AuthProvider';
+import { AdminHomeTitle } from '../AdminDashboard/AdminHomeTitle';
+import { TeacherHomeData } from './TeacherHomeData';
+import { CheckReservations } from '../CheckReservations/CheckReservations';
 
 const TeacherDashboard = () => {
-  const [userName, setUserName] = useState('');
+	const { user } = useAuthProvider();
+	const [userName, setUserName] = useState(user?.name);
 
-  useEffect(() => {
-    setUserName('Nombre del usuario');
-  }, []);
+	useEffect(() => {
+		setUserName(userName);
+	}, [userName]);
 
-  return (
-    <React.Fragment>
-      <div className='
-        py-4 px-2 text-center text-sky-500
-        sm:py-6
-      '>
-        <span>
-          {userName}
-        </span>
-      </div>
-    </React.Fragment>
-  )
-}
+	return (
+		<React.Fragment>
+			<AdminHomeTitle>¡Bienvenido, {userName}!</AdminHomeTitle>
+			<TeacherHomeData />
+			<CheckReservations />
+		</React.Fragment>
+	);
+};
 
-export {
-  TeacherDashboard,
-}
+export { TeacherDashboard };

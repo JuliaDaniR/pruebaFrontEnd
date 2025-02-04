@@ -1,49 +1,67 @@
-import { GenericCardWithoutOnDelete } from '../../components/GenericCard/GenericCard';
+import { useEffect, useState } from 'react';
+import { Device } from '../../models/Device';
+import { DeviceService } from '../../services/ResourceService';
 import { InventoryAddOne } from './InventoryAddOne';
-import InventoryCardGrid from './InventoryCardGrid';
+import { InventoryCardGrid } from './InventoryCardGrid';
 import { InventorySearchingForm } from './InventorySearchingForm';
 import { InventoryTitle } from './InventoryTitle';
-
-const experimentalCards: GenericCardWithoutOnDelete[] = [
-  {
-    itemKey: 1,
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod reiciendis aliquid dolor? Delectus atque soluta esse labore non inventore',
-    redirectToEditPathString: '/',
-    title: 'Titulo 1',
-  },
-  {
-    itemKey: 2,
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod reiciendis aliquid dolor? Delectus atque soluta esse labore non inventore',
-    redirectToEditPathString: '/',
-    title: 'Titulo 2',
-  },
-  {
-    itemKey: 3,
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod reiciendis aliquid dolor? Delectus atque soluta esse labore non inventore',
-    redirectToEditPathString: '/',
-    title: 'Titulo 3',
-  },
-  {
-    itemKey: 4,
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod reiciendis aliquid dolor? Delectus atque soluta esse labore non inventore',
-    redirectToEditPathString: '/',
-    title: 'Titulo 4',
-  },
-  {
-    itemKey: 5,
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod reiciendis aliquid dolor? Delectus atque soluta esse labore non inventore',
-    redirectToEditPathString: '/',
-    title: 'Titulo 5',
-  },
-  {
-    itemKey: 6,
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod reiciendis aliquid dolor? Delectus atque soluta esse labore non inventore',
-    redirectToEditPathString: '/',
-    title: 'Titulo 6',
-  },
-]
+import { showSuccessAlert } from '../../helpers/showGenericAlerts';
 
 const Inventory = () => {
+  const deviceService = DeviceService();
+
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [page, setPage] = useState<number>(0);
+  const [areThereMore, setAreThereMore] = useState<boolean>(true);
+
+  // const getDevices = async () => {
+  //   const newPage = page + 1;
+  //   const response = await deviceService.getAllDevices(newPage);
+  //   setDevices(
+  //     prevDevices => JSON.stringify(prevDevices) !== JSON.stringify(response.content)
+  //       ? [...prevDevices, ...response.content]
+  //       : prevDevices
+  //   );
+  //   setPage(newPage);
+  //   if (response.totalPages - 1 === newPage) {
+  //     setAreThereMore(false);
+  //   }
+  // }
+
+  // const handleMoreDevices = async () => {
+  //   await getDevices();
+  // }
+ console.log(page, areThereMore)
+  const handleDeleteDevice = async (
+    id: number
+  ) => {
+    await deviceService.deleteDeviceById(id);
+    showSuccessAlert();
+    setPage(0);
+    setAreThereMore(true);
+    setDevices([]);
+  }
+
+
+  useEffect(() => {
+    if (devices.length === 0) {
+      const initialize = async () => {
+        const response = await deviceService.getAllDevices(0);
+        console.log(response)
+        setDevices(
+          prevDevices => String(prevDevices) === String(response.content)
+            ? prevDevices
+            : response
+        );
+        if (response.totalPages - 1 === 0) {
+          setAreThereMore(false);
+        }
+      }
+      initialize();
+    }
+  }, [deviceService, devices]);
+
+
   return (
     <>
       <div className='
@@ -52,7 +70,7 @@ const Inventory = () => {
       '>
         <InventoryTitle />
         <InventorySearchingForm categories={[]} />
-        <InventoryCardGrid cards={experimentalCards} />
+        <InventoryCardGrid cards={devices} onDeleteDevice={handleDeleteDevice} />
       </div>
 
       <InventoryAddOne />

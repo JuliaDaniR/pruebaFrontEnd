@@ -3,51 +3,44 @@ import Swal from 'sweetalert2';
 import { RegisterResponse } from '../context/register';
 import { getErrorMessage } from '../utils/error';
 import { UserRegister } from '../models/UserRegister';
+import { PORT_SERVER } from '.';
 
 const registerRequest = async (
-  userRegisterInFormData: UserRegister,
+	userRegisterInFormData: UserRegister,
 ): Promise<RegisterResponse> => {
-  try {
-    const token = localStorage.getItem('jwtToken'); // Recuperar el token desde el almacenamiento local
-
-    const response = await axios.post<RegisterResponse>(
-      'https://class-kit-backend.onrender.com/institution/register', // URL completa del backend
-      { ...userRegisterInFormData },
-      {
-        headers: {
-          'Content-Type': 'application/json', // Configura el tipo de contenido
-          'Authorization': `Bearer ${token}`, // Enviar el token en el encabezado
-        },
-        withCredentials: true, // Habilita el envío de cookies si el backend lo requiere
-      },
-    );
+	try {
+		const response = await axios.post<RegisterResponse>(
+			`${PORT_SERVER}/institution/register`,
+			{ ...userRegisterInFormData }
+		);
 
     Swal.fire({
-      icon: 'success',
-      title: 'Registro exitoso',
-      text: `Bienvenido, ${response.data.name}!`,
-      timer: 23000,
-      showConfirmButton: false,
+		icon: 'success',
+		title: 'Registro exitoso',
+		timer: 3000,
+		text: `Bienvenido, ${userRegisterInFormData.full_name_admin}!`,
+		
+		showConfirmButton: false,
     });
 
-    return response.data;
-  } catch (error: unknown) {
-    let errorMessage = 'Ocurrió un error desconocido.';
+		return response.data;
+	} catch (error: unknown) {
+		let errorMessage = 'Ocurrió un error desconocido.';
 
-    if (axios.isAxiosError(error) && error.response) {
-      errorMessage = getErrorMessage(error.response.status);
-    } else if (error instanceof Error) {
-      errorMessage = error.message;
-    }
+		if (axios.isAxiosError(error) && error.response) {
+			errorMessage = getErrorMessage(error.response.status);
+		} else if (error instanceof Error) {
+			errorMessage = error.message;
+		}
 
-    Swal.fire({
-      icon: 'error',
-      title: 'Error al registrarse',
-      text: errorMessage,
-    });
+		Swal.fire({
+			icon: 'error',
+			title: 'Error al registrarse',
+			text: errorMessage,
+		});
 
-    throw new Error(errorMessage);
-  }
+		throw new Error(errorMessage);
+	}
 };
 
 export default registerRequest;

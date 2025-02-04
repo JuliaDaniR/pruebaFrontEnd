@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from '/logo-box.svg';
 import RedirectButton from '../components/RedirectButton';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import { useAuthProvider } from '../context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 const mainContainer = 'flex flex-col min-h-screen bg-zinc-50';
 const contentContainer = 'flex flex-col items-center justify-center flex-grow';
@@ -10,6 +12,13 @@ const buttonsContainer =
 	'flex flex-col justify-center bg-sky-500 px-20 py-10 rounded-[5px]';
 
 const LandingPage: React.FC = () => {
+	const { user, isLoggedIn } = useAuthProvider();
+	const navigate = useNavigate();
+	useEffect(() => {
+		if (isLoggedIn && user) {
+			navigate(`/${user?.role.toLowerCase()}-dashboard`);
+		}
+	}, [isLoggedIn, navigate, user?.role, user]);
 	return (
 		<div className={mainContainer}>
 			<Header />

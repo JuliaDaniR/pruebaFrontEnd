@@ -1,19 +1,21 @@
-import { GenericCard, GenericCardWithoutOnDelete } from '../../components/GenericCard/GenericCard';
+import { GenericCard } from '../../components/GenericCard/GenericCard';
+import { User } from '../../models/User';
 
 interface UserCardGridProps {
-  cards: GenericCardWithoutOnDelete[];
-}
-
-const handleDeleteCard = (
-  itemKeyToDelete: number
-) => {
-  // Delete Logic
-  console.log(itemKeyToDelete);
+  cards: User[];
+  onDeleteUser: (dni: string) => void;
 }
 
 const UserCardGrid = (
-  { cards }: UserCardGridProps
+  { cards, onDeleteUser }: UserCardGridProps
 ) => {
+  const handleDeleteCard = (
+    itemKeyToDelete: number
+  ) => {
+    // Delete Logic
+    onDeleteUser(String(itemKeyToDelete));
+  }
+
   return (
     <>
       <div className='
@@ -26,17 +28,17 @@ const UserCardGrid = (
           cards.map(card => {
             return (
               <GenericCard
-                key={card.itemKey}
-                itemKey={card.itemKey}
-                description={card.description}
-                redirectToEditPathString={card.redirectToEditPathString}
-                title={card.title}
+                key={card.dni}
+                itemKey={Number(card.dni)}
+                title={card.fullName || ''}
+                description={card.nameSchool || ''}
+                redirectToEditPathString={`/edit-user/${card.dni}`}
                 onDeleteEvent={handleDeleteCard}
               />
             )
           })
         }
-        
+
       </div>
     </>
   )

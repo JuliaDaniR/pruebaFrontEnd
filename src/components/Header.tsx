@@ -3,7 +3,7 @@ import logo from '../assets/img/logo-box-white.svg';
 import { Link } from "react-router-dom";
 import AboutModal from "./AboutModal";
 
-const headerMainContainer = 'fixed flex items-center justify-between px-10 bg-sky-500 w-screen';
+const headerMainContainer = 'fixed flex items-center justify-between px-10 bg-sky-500 w-screen z-50';
 const logoContainer = 'flex items-center';
 
 const Header: React.FC = () => {

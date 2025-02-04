@@ -1,5 +1,5 @@
 import logo from '/logo-box.svg';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useAuthProvider } from '../context/AuthProvider';
@@ -21,8 +21,14 @@ const buttonStyles =
 const Login: React.FC = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const { loginUser } = useAuthProvider();
+	const { user, loginUser, isLoggedIn } = useAuthProvider();
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (isLoggedIn && user) {
+			navigate(`/${user?.role.toLowerCase()}-dashboard`);
+		}
+	}, [isLoggedIn, navigate, user?.role, user]);
 
 	const handleLogin = async (e: React.FormEvent) => {
 		e.preventDefault();

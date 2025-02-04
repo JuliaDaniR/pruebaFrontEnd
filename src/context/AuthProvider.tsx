@@ -2,6 +2,7 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { AuthContextType, LoginResponse, UserCredentials } from './user';
 import loginRequest from '../services/loginRequest';
+import Swal from 'sweetalert2';
 
 // contexto para manejar el estado del usuario
 const AuthProvider = createContext<AuthContextType | null>(null);
@@ -20,8 +21,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 			const now = new Date().getTime();
 			const timeElapsed = now - parseInt(storedTimestamp);
 
-			if (timeElapsed > 24 * 60 * 60 * 1000) {
-				logout();
+			if (timeElapsed > 1 * 60 * 60 * 1000 || !user) {
+				setUser(null);
+				setIsLoggedIn(false);
+				localStorage.removeItem('user');
+				localStorage.removeItem('timestamp');
+			}
+			if (user) {
+				setIsLoggedIn(true);
 			}
 		}
 	}, [user]);
@@ -49,10 +56,29 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 	};
 
 	const logout = () => {
-		setUser(null);
-		setIsLoggedIn(false);
-		localStorage.removeItem('user');
-		localStorage.removeItem('timestamp');
+		Swal.fire({
+			title: '¿Estás seguro?',
+			text: 'Se cerrará tu sesión.',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#fb923c',
+			confirmButtonText: 'Sí, cerrar sesión',
+			customClass: {
+				popup: 'custom-swal-popup',
+			},
+		}).then((result) => {
+			if (result.isConfirmed) {
+				// Lógica para cerrar sesión (lo que ya tienes implementado)
+				setUser(null);
+				setIsLoggedIn(false);
+				localStorage.removeItem('user');
+				localStorage.removeItem('timestamp');
+
+				// Redirigir al usuario a la página de inicio de sesión
+				location.href = '/login';
+			}
+		});
 	};
 
 	return (

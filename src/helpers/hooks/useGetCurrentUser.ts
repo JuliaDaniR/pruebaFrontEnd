@@ -1,28 +1,23 @@
-// TODO: Darle la logica real para verificar usuarios
+import { useEffect } from 'react';
+import { useAuthProvider } from '../../context/AuthProvider';
+import { LoginResponse } from '../../context/user';
 
-import { useEffect, useState } from 'react';
-import { RouteType } from '../RolesType';
-import { ExperimentalUser } from '../../models/ExperimentalUser';
-
-interface UseGetCurrentUserProps {
-	onUpdateUser: (user: ExperimentalUser) => void;
+interface useGetCurrentUserProps {
+  onUpdateUser: (
+    tokenValue: LoginResponse | null
+  ) => void;
 }
 
-const UseGetCurrentUser = ({ onUpdateUser }: UseGetCurrentUserProps) => {
-	const [currentRole, setCurrentRole] = useState<RouteType>('teacher');
-	const [currentName, setCurrentName] = useState<string>('German');
+const useGetCurrentUser = (
+  { onUpdateUser }: useGetCurrentUserProps
+) => {
+  const context = useAuthProvider();
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setCurrentRole((prevRole) => (prevRole == 'admin' ? 'teacher' : 'admin'));
-			setCurrentName((prevName) =>
-				prevName == 'admin' ? 'German' : 'DocenteName',
-			);
-			onUpdateUser({ name: currentName, role: currentRole });
-			return null;
-		}, 2000);
-		return () => clearInterval(interval);
-	}, [onUpdateUser, currentRole, currentName]);
-};
+  useEffect(() => {
+    onUpdateUser(context.user);
+  }, [onUpdateUser, context]);
+}
 
-export { UseGetCurrentUser };
+export {
+  useGetCurrentUser,
+}
