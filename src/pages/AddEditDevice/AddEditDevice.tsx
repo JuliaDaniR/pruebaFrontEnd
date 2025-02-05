@@ -25,7 +25,8 @@ const AddEditDevice = () => {
 	const [deviceForm, setDeviceForm] = useState<AddEditDeviceForm>({
 		...new AddEditDeviceForm(),
 	});
-	const [deviceNameToEdit, setDeviceNameToEdit] = useState('')
+	const [deviceNameToEdit, setDeviceNameToEdit] = useState('');
+	const [firstRender, setFirstRender] = useState<boolean>(true);
 
 	// Services
 	const deviceService = DeviceService();
@@ -33,11 +34,12 @@ const AddEditDevice = () => {
 	// Functions
 	const prepareDeviceToSubmit = (form: AddEditDeviceForm): Device => {
 		return {
+			id: id ? Number(id) : 0,
 			category: form.category,
 			description: form.description,
 			name: form.name,
-			status: form.isAvailable === 'true' ? 'AVAILABLE' : 'UNAVAILABLE',
-			inventoryId: id ? Number(id) : 0,
+			status: form.isAvailable,
+			inventoryId: 0,
 		};
 	};
 
@@ -57,6 +59,11 @@ const AddEditDevice = () => {
 
 	// Use effects
 	useEffect(() => {
+		if (firstRender) {
+			setFirstRender(false);
+			return;
+		}
+
 		const reFillingForm = async () => {
 			const device = await deviceService.getDeviceById(Number(id));
 			setDeviceForm((prevForm) => {
@@ -83,7 +90,7 @@ const AddEditDevice = () => {
 		} else {
 			console.log('No hay id');
 		}
-	}, [deviceService, id]);
+	}, [deviceService, id, firstRender]);
 
 	useEffect(() => {
 		if (deviceForm) {

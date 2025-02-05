@@ -1,5 +1,3 @@
-type RouteType = 'admin' | 'teacher' | 'logged' | 'anyone';
+type RouteType = 'ADMIN' | 'TEACHER' | 'LOGGED' | 'anyone';
 
-export{
-  type RouteType,
-}
+export { type RouteType };

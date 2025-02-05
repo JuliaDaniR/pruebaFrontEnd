@@ -2,6 +2,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { PORT_SERVER } from '..';
 import {
+	CreateReservationResponse,
 	ReservationResponse,
 	ReservationSimple,
 } from '../../models/teacher/ReservationGetUser';
@@ -14,6 +15,40 @@ export const getReservationsByUser = async (
 	try {
 		const response = await axios.get<ReservationResponse>(
 			`${PORT_SERVER}/reservations/byUser/${dni}`,
+			{
+				params: { page },
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			},
+		);
+
+		return response.data;
+	} catch (error) {
+		let errorMessage;
+		if (axios.isAxiosError(error)) {
+			errorMessage = error.response?.data?.message;
+		} else {
+			console.error('Error desconocido:', error);
+		}
+		console.error('Error al eliminar la reserva:', error);
+		Swal.fire({
+			title: 'Error',
+			text: errorMessage,
+			icon: 'error',
+			confirmButtonText: 'Aceptar',
+		});
+		return null;
+	}
+};
+
+export const getAllReservations = async (
+	page: number = 0,
+	token: string,
+): Promise<ReservationResponse | null> => {
+	try {
+		const response = await axios.get<ReservationResponse>(
+			`${PORT_SERVER}/reservations/allReservations`,
 			{
 				params: { page },
 				headers: {
@@ -62,7 +97,7 @@ export const getReservationsByID = async (
 };
 
 export const deleteReservationByID = async (
-	id: number,
+	id: number | undefined,
 	token: string,
 ): Promise<boolean> => {
 	try {
@@ -119,16 +154,7 @@ export const updateReservationByID = async (
 	currentData: ReservationSimple,
 ): Promise<boolean> => {
 	try {
-		const { startDate, selectedTimeSlot, reservationShiftStatus, resourceId } =
-			currentData;
-		console.log(currentData);
-		const data = {
-			startDate,
-			selectedTimeSlot,
-			reservationShiftStatus,
-			resourceid: resourceId,
-		};
-		await axios.patch(`${PORT_SERVER}/reservations/update/${id}`, data, {
+		await axios.patch(`${PORT_SERVER}/reservations/update/${id}`, currentData, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
@@ -157,5 +183,48 @@ export const updateReservationByID = async (
 			confirmButtonText: 'Aceptar',
 		});
 		return false;
+	}
+};
+
+export const createReservation = async (
+	reservationData: ReservationSimple,
+	token: string,
+): Promise<CreateReservationResponse | null> => {
+	try {
+		const response = await axios.post(
+			`${PORT_SERVER}/reservations/create`,
+			reservationData,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			},
+		);
+
+		Swal.fire({
+			title: 'Reserva creada',
+			text: 'La reserva ha sido creada exitosamente.',
+			icon: 'success',
+			confirmButtonText: 'Aceptar',
+		});
+
+		return response.data;
+	} catch (error) {
+		let errorMessage =
+			'Ocurrió un error al crear la reserva. Intenta nuevamente.';
+		if (axios.isAxiosError(error)) {
+			errorMessage = error.response?.data?.message || errorMessage;
+		} else {
+			console.error('Error desconocido:', error);
+		}
+
+		Swal.fire({
+			title: 'Error',
+			text: errorMessage,
+			icon: 'error',
+			confirmButtonText: 'Aceptar',
+		});
+
+		return null;
 	}
 };

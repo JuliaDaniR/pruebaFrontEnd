@@ -3,15 +3,20 @@ import { createContext, useState, useContext, useEffect } from 'react';
 import { AuthContextType, LoginResponse, UserCredentials } from './user';
 import loginRequest from '../services/loginRequest';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 // contexto para manejar el estado del usuario
 const AuthProvider = createContext<AuthContextType | null>(null);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
+	const [logoutIntentional, setLogoutIntentional] = useState<boolean>(false);
+
 	const [user, setUser] = useState<LoginResponse | null>(() => {
 		const storedUser = localStorage.getItem('user');
 		return storedUser ? JSON.parse(storedUser) : null;
 	});
+
+	const navigate = useNavigate();
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -26,9 +31,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 				setIsLoggedIn(false);
 				localStorage.removeItem('user');
 				localStorage.removeItem('timestamp');
+				setLogoutIntentional(true);
 			}
 			if (user) {
 				setIsLoggedIn(true);
+				setLogoutIntentional(false);
 			}
 		}
 	}, [user]);
@@ -42,6 +49,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 			if (response) {
 				setUser(response);
 				setIsLoggedIn(true);
+				setLogoutIntentional(false);
+				localStorage.setItem('logoutIntentional', JSON.stringify(false));
 				localStorage.setItem('user', JSON.stringify(response));
 				localStorage.setItem('timestamp', new Date().getTime().toString());
 				return response;
@@ -69,20 +78,23 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 			},
 		}).then((result) => {
 			if (result.isConfirmed) {
-				// Lógica para cerrar sesión (lo que ya tienes implementado)
-				setUser(null);
-				setIsLoggedIn(false);
-				localStorage.removeItem('user');
-				localStorage.removeItem('timestamp');
+				setLogoutIntentional(true);
 
-				// Redirigir al usuario a la página de inicio de sesión
-				location.href = '/login';
+				setTimeout(() => {
+					setUser(null);
+					setIsLoggedIn(false);
+					localStorage.removeItem('user');
+					localStorage.removeItem('timestamp');
+				}, 5000);
+
+				navigate('/login');
 			}
 		});
 	};
 
 	return (
-		<AuthProvider.Provider value={{ user, isLoggedIn, loginUser, logout }}>
+		<AuthProvider.Provider
+			value={{ user, isLoggedIn, loginUser, logout, logoutIntentional }}>
 			{children}
 		</AuthProvider.Provider>
 	);

@@ -1,8 +1,8 @@
 export interface AdminGet {
-	dni: string;
-	fullName: string;
-	email: string;
-	nameSchool: string;
+	dni?: string;
+	fullName?: string;
+	email?: string;
+	nameSchool?: string;
 }
 
 export interface AdminPut {

@@ -1,58 +1,99 @@
-import React, { useState } from 'react';
-import { AdminInfo } from '../AdminDashboard';
+import React, { useEffect, useState } from 'react';
 import { InstitutionUpdate } from '../../models/admin/InstitutionUpdate';
 import { EditAdminButton } from './EditAdminButton';
-import { validateForm } from '../../utils/validations';
-import { updateInstitution } from '../../services/institutionRequest';
+import { validateFormInstitutionUpdate } from '../../utils/validations';
+import {
+	getInstitutionData,
+	updateInstitution,
+} from '../../services/institutionRequest';
 import { useAuthProvider } from '../../context/AuthProvider';
+import { AdminGet } from '../../models/admin/AdminGet';
+import Swal from 'sweetalert2';
 
-const inputClass =
-	'mt-1 block w-[40vw] p-2 rounded-sm border border-gray-300 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm';
+const inputClass = `mt-1 block w-[40vw] p-2 rounded-sm border border-gray-300 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`;
 const divInputClass = 'flex items-center py-2 justify-between mx-8';
 
-export const EditInstitutionForm: React.FC<AdminInfo> = (admin) => {
+export const EditInstitutionForm: React.FC<AdminGet> = (admin) => {
 	const { user } = useAuthProvider();
-	const [formData, setFormData] = useState<AdminInfo>({
-		...admin,
+	const [loading, setLoading] = useState<boolean>(true);
+	const [formData, setFormData] = useState<InstitutionUpdate>({
+		cue: '',
+		name: '',
+		educational_level: '',
+		address: '',
+		email: '',
+		phone: '',
+		website: '',
 	});
+
+	useEffect(() => {
+		const getAdmin = async () => {
+			if (user?.name && admin?.nameSchool) {
+				try {
+					const data = await getInstitutionData(
+						admin.nameSchool,
+						user.jwtToken,
+					);
+					setFormData({
+						cue: data?.cue || '',
+						name: data?.name || '',
+						educational_level: data?.educational_level || '',
+						address: data?.address || '',
+						email: data?.email || '',
+						phone: data?.phone || '',
+						website: data?.website || '',
+					});
+					setLoading(false);
+				} catch (error) {
+					console.error('Error al cargar los datos del administrador:', error);
+				}
+			}
+		};
+		getAdmin();
+	}, [user?.name, user?.jwtToken, admin.nameSchool]);
 
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
 	) => {
 		const { name, value } = e.target;
-		setFormData({
-			...formData,
+		setFormData((prevState) => ({
+			...prevState,
 			[name]: value,
-		});
+		}));
 	};
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const institutionData: InstitutionUpdate = {
-			cue: formData.cue,
-			name: formData.name,
-			educational_level: formData.educational_level,
-			address: formData.address,
-			email: formData.email,
-			phone: formData.phone,
-			website: formData.website,
-		};
-		const errorMessage = validateForm({
-			...formData,
-			['password_admin']: formData.password_admin,
+		const result = await Swal.fire({
+			title: '¿Estás seguro?',
+			text: '¿Quieres guardar los cambios realizados?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Sí, guardar',
+			cancelButtonText: 'Cancelar',
 		});
 
-		if (errorMessage) {
-			throw new Error(errorMessage);
-		}
+		if (result.isConfirmed) {
+			const errorMessage = validateFormInstitutionUpdate({
+				...formData,
+			});
 
-		try {
-			await updateInstitution(institutionData, user?.jwtToken);
-		} catch (error) {
-			console.error('Error al registrarse:', error);
-			alert('Hubo un problema con el registro. Inténtalo de nuevo más tarde.');
+			if (errorMessage) {
+				throw new Error(errorMessage);
+			}
+			try {
+				await updateInstitution(formData, user?.jwtToken);
+			} catch (error) {
+				console.error('Error al registrarse:', error);
+				alert(
+					'Hubo un problema con el registro. Inténtalo de nuevo más tarde.',
+				);
+			}
 		}
 	};
+	if (loading) {
+		return <p>Cargando datos de la institucion...</p>;
+	}
 	return (
 		<div className='bg-white shadow-2xl rounded px-8 pt-6 pb-8 m-4'>
 			<h2 className='text-2xl py-6 px-2 text-sky-500 sm:pt-10 font-bold'>
@@ -137,7 +178,7 @@ export const EditInstitutionForm: React.FC<AdminInfo> = (admin) => {
 					<input
 						type='email'
 						name='email'
-						id='email'
+						id='email_Istitution'
 						value={formData.email}
 						onChange={handleInputChange}
 						className={inputClass}

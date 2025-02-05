@@ -12,13 +12,15 @@ const buttonsContainer =
 	'flex flex-col justify-center bg-sky-500 px-20 py-10 rounded-[5px]';
 
 const LandingPage: React.FC = () => {
-	const { user, isLoggedIn } = useAuthProvider();
+	const { user, isLoggedIn, logoutIntentional } = useAuthProvider();
 	const navigate = useNavigate();
 	useEffect(() => {
-		if (isLoggedIn && user) {
-			navigate(`/${user?.role.toLowerCase()}-dashboard`);
+		if (!logoutIntentional) {
+			if (isLoggedIn && user) {
+				navigate(`/${user?.role.toLowerCase()}-dashboard`);
+			}
 		}
-	}, [isLoggedIn, navigate, user?.role, user]);
+	}, [isLoggedIn, navigate, user?.role, user, logoutIntentional]);
 	return (
 		<div className={mainContainer}>
 			<Header />

@@ -5,7 +5,7 @@ import { Users } from '../pages/Users/Users';
 import { Inventory } from '../pages/Inventory/Inventory';
 import { AddEditUsers } from '../pages/AddEditUsers/AddEditUsers';
 import { AddEditDevice } from '../pages/AddEditDevice/AddEditDevice';
-import { SearchDevices } from '../pages/SearchDevices/SearchDevices';
+// import { SearchDevices } from '../pages/SearchDevices/SearchDevices';
 import { CheckReservations } from '../pages/CheckReservations/CheckReservations';
 import { NewReservation } from '../pages/NewReservation/NewReservation';
 import { EditAdmin } from '../pages/EditAdmin/EditAdmin';
@@ -17,56 +17,56 @@ const routeList: Route[] = [
 	{
 		path: '/admin-dashboard',
 		name: 'Home',
-		routeType: 'admin',
+		routeType: 'ADMIN',
 		isShownInMenu: true,
 		element: AdminDashboard,
 	},
 	{
 		path: '/edit-admin-profile',
 		name: 'Editar Admin',
-		routeType: 'admin',
+		routeType: 'ADMIN',
 		isShownInMenu: false,
 		element: EditAdmin,
 	},
 	{
 		path: '/users',
 		name: 'Administrar Usuarios',
-		routeType: 'admin',
+		routeType: 'ADMIN',
 		isShownInMenu: true,
 		element: Users,
 	},
 	{
 		path: '/inventory',
 		name: 'Administrar Inventario',
-		routeType: 'admin',
+		routeType: 'ADMIN',
 		isShownInMenu: true,
 		element: Inventory,
 	},
 	{
 		path: '/add-user',
 		name: 'Agregar Usuario',
-		routeType: 'admin',
+		routeType: 'ADMIN',
 		isShownInMenu: false,
 		element: AddEditUsers,
 	},
 	{
 		path: '/edit-user/:dni',
 		name: 'Editar Usuario',
-		routeType: 'admin',
+		routeType: 'ADMIN',
 		isShownInMenu: false,
 		element: AddEditUsers,
 	},
 	{
 		path: '/add-device',
 		name: 'Agregar Dispositivo',
-		routeType: 'admin',
+		routeType: 'ADMIN',
 		isShownInMenu: false,
 		element: AddEditDevice,
 	},
 	{
 		path: '/edit-device/:id',
 		name: 'Editar Dispositivo',
-		routeType: 'admin',
+		routeType: 'ADMIN',
 		isShownInMenu: false,
 		element: AddEditDevice,
 	},
@@ -74,49 +74,50 @@ const routeList: Route[] = [
 	{
 		path: '/teacher-dashboard/:page?',
 		name: 'Home',
-		routeType: 'teacher',
+		routeType: 'TEACHER',
 		isShownInMenu: true,
 		element: TeacherDashboard,
 	},
-	{
-		path: '/search-device',
-		name: 'Ver dispositivos',
-		routeType: 'teacher',
-		isShownInMenu: true,
-		element: SearchDevices,
-	},
+	/* no se esta usando por el momento */
+	// {
+	// 	path: '/search-device',
+	// 	name: 'Ver dispositivos',
+	// 	routeType: 'TEACHER',
+	// 	isShownInMenu: true,
+	// 	element: SearchDevices,
+	// },
 	{
 		path: '/check-reservations',
-		name: 'Ver mis reservas',
-		routeType: 'teacher',
+		name: 'Mis Reservas',
+		routeType: 'TEACHER',
 		isShownInMenu: true,
 		element: CheckReservations,
 	},
 	{
 		path: '/new-reservations',
 		name: 'Nueva Reserva',
-		routeType: 'teacher',
+		routeType: 'TEACHER',
 		isShownInMenu: true,
 		element: AddNewReservation,
 	},
 	{
 		path: '/edit-reservation/:id?',
 		name: 'Editar Reserva',
-		routeType: 'teacher',
+		routeType: 'TEACHER',
 		isShownInMenu: false,
 		element: EditReservation,
 	},
 	{
 		path: '/add-reservation',
 		name: 'Reservar Dispositivo',
-		routeType: 'teacher',
+		routeType: 'TEACHER',
 		isShownInMenu: false,
 		element: NewReservation,
 	},
 	{
 		path: '/conditions',
 		name: 'Términos y Condiciones',
-		routeType: 'logged',
+		routeType: 'USER',
 		isShownInMenu: true,
 		element: TermsAndConditions,
 	},

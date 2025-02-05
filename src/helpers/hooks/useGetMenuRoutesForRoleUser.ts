@@ -1,28 +1,33 @@
 import { useEffect, useState } from 'react';
 import { Route } from '../Route';
-import { ExperimentalUser } from '../../models/ExperimentalUser';
-import { UseGetCurrentUser } from './useGetCurrentUserExperimental';
 import { UseGetMenuRoutes } from './useGetMenuRoutes';
+import { useGetCurrentUser } from './useGetCurrentUser';
+import { LoginResponse } from '../../context/user';
 
 interface UseGetMenuRoutesForRoleUserProps {
 	onUpdateRoutes: (routes: Route[]) => void;
 }
 
+const emptyUser: LoginResponse = {
+	dni: '0',
+	jwtToken: '',
+	name: '',
+	role: 'USER',
+};
+
 const UseGetMenuRoutesForRoleUser = ({
 	onUpdateRoutes,
 }: UseGetMenuRoutesForRoleUserProps) => {
-	const getCurrentUser = UseGetCurrentUser;
+	const getCurrentUser = useGetCurrentUser;
 	const getMenuRoutes = UseGetMenuRoutes;
 
 	const [routes, setRoutes] = useState<Route[]>([]);
-	const [user, setUser] = useState<ExperimentalUser>({
-		name: '',
-		role: 'admin',
-	});
+	const [user, setUser] = useState<LoginResponse | null>({ ...emptyUser });
 
-	const handleUserUpdate = ({ name, role }: ExperimentalUser) => {
-		setUser({ name, role });
+	const handleUserUpdate = (loggedUser: LoginResponse | null) => {
+		setUser(loggedUser);
 	};
+
 	const handleMenuUpdate = (newRoutes: Route[]) => {
 		setRoutes(newRoutes);
 	};
@@ -30,7 +35,7 @@ const UseGetMenuRoutesForRoleUser = ({
 	getCurrentUser({ onUpdateUser: handleUserUpdate });
 
 	getMenuRoutes({
-		menuType: user.role,
+		menuType: user?.role || 'USER',
 		onUpdateRoutes: handleMenuUpdate,
 	});
 

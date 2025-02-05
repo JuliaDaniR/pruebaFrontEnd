@@ -7,8 +7,8 @@ export const controlClasses = {
   `,
   textInputContainerClasses: smflex1,
   radioInputContainerClasses: `
-    flex gap-4
-    ${smflex1} sm:justify-between sm:border sm:border-sky-500 sm:rounded-md
+    flex gap-4 
+    ${smflex1} sm:justify-between sm:border sm:border-sky-500 sm:rounded-md sm:px-2
   `,
   labelContainerClasses: smflex1,
   labelClasses: `

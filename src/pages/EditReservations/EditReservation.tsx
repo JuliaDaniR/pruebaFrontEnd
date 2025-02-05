@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { UseReservations } from '../../helpers/hooks/UseReservations';
 import {
 	Reservation,
 	ReservationSimple,
 } from '../../models/teacher/ReservationGetUser';
 import { useNavigate } from 'react-router-dom';
+import { DeviceService } from '../../services/ResourceService';
+import { Device } from '../../models/Device';
 
 interface SubmitData {
 	startDate: string;
@@ -13,34 +15,19 @@ interface SubmitData {
 	resourceId: number;
 }
 
-const resources = [
-	{
-		id: 1,
-		name: 'Proyector',
-		description: 'se ven videos',
-		category: 'AUDIOVISUALS',
-		status: 'AVAILABLE',
-		inventoryId: 12,
-	},
-	{
-		id: 2,
-		name: 'Microfono',
-		description: 'Para cantar',
-		category: 'AUDIOVISUALS',
-		status: 'IN_USE',
-		inventoryId: 9,
-	},
-];
-
 const EditReservation: React.FC = () => {
 	const navigate = useNavigate();
+
+	const today = new Date().toISOString().split('T')[0];
 	const [startDate, setStartDate] = useState<string>('');
 	const [shift, setShift] = useState<string>('MANANA');
 	const [timeSlot, setTimeSlot] = useState<string>('');
 	const [resourceId, setResourceId] = useState<number>(0);
 	const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
+	const { getAllDevices } = DeviceService();
+	const [resourcesData, setResourceData] = useState<Device[]>();
 
-	const { getReservationId, getReservationTeacher, updateReservation } =
+	const { getReservationId, updateReservation, getAllReservationsData } =
 		UseReservations();
 
 	const onSubmit = async ({
@@ -76,29 +63,42 @@ const EditReservation: React.FC = () => {
 	};
 
 	const timeSlots: { [key: string]: string[] } = {
-		MANANA: ['7-8', '8-9', '9-10', '10-11', '11-12', '12-13'],
+		MANANA: ['07-08', '08-09', '09-10', '10-11', '11-12', '12-13'],
 		TARDE: ['13-14', '14-15', '15-16', '16-17', '17-18'],
 		NOCHE: ['18-19', '19-20', '20-21', '21-22'],
 	};
 
+	const getAllDevicesMemoized = useCallback(async () => {
+		const devices = await getAllDevices();
+		const devicesData = devices?.data;
+		if (JSON.stringify(devicesData) !== JSON.stringify(resourcesData)) {
+			setResourceData(devicesData || []);
+		}
+	}, [getAllDevices, resourcesData]);
+
+	useEffect(() => {
+		getAllDevicesMemoized();
+	}, [getAllDevicesMemoized]);
+
 	const checkResourceAvailability = async (selectedDate: string) => {
-		const resource = resources.find((r) => r.id === resourceId);
-		if (resource?.status === 'AVAILABLE') {
+		const resource = resourcesData?.find((r) => r.id === resourceId);
+		if (resource?.status === 'AVAILABLE' || resource?.status === 'IN_USE') {
 			try {
-				const reservations: Reservation[] | undefined =
-					await getReservationTeacher();
+				const reservationsData = await getAllReservationsData();
+				const reservations: Reservation[] | ReservationSimple[] =
+					reservationsData || [];
+
 				const reservedSlots = reservations
-					?.filter(
-						(res: Reservation) =>
-							res.date === selectedDate &&
+					.filter(
+						(res: ReservationSimple | Reservation) =>
+							res.startDate === selectedDate &&
 							res.reservationShiftStatus === shift &&
 							res.resourceId === resourceId,
 					)
-					.map((res: Reservation) => res.selectedTimeSlot);
+					.map((res: ReservationSimple | Reservation) => res.selectedTimeSlot);
 
-				// Filtra los horarios que ya están reservados
 				const filteredSlots = timeSlots[shift].filter(
-					(slot) => !reservedSlots?.includes(slot),
+					(slot) => !reservedSlots.includes(slot),
 				);
 				setAvailableTimeSlots(filteredSlots);
 			} catch (error) {
@@ -145,7 +145,7 @@ const EditReservation: React.FC = () => {
 							className='w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-sky-500'
 							required>
 							<option value=''>Seleccionar recurso</option>
-							{resources.map((resource) => (
+							{resourcesData?.map((resource) => (
 								<option key={resource.id} value={resource.id}>
 									{resource.name}
 								</option>
@@ -158,6 +158,7 @@ const EditReservation: React.FC = () => {
 						<input
 							type='date'
 							value={startDate}
+							min={today}
 							onChange={(e) => setStartDate(e.target.value)}
 							className='w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-sky-500'
 							required
@@ -183,7 +184,7 @@ const EditReservation: React.FC = () => {
 							onChange={(e) => setTimeSlot(e.target.value)}
 							className='w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-sky-500'
 							required>
-							<option value=''>Seleccionar horario</option>
+							<option value={''}>Seleccionar horario</option>
 							{availableTimeSlots.map((slot) => (
 								<option key={slot} value={slot}>
 									{slot}

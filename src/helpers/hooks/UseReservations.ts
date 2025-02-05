@@ -1,13 +1,16 @@
 import { useParams } from 'react-router-dom';
 import { useAuthProvider } from '../../context/AuthProvider';
 import {
+	createReservation,
 	deleteReservationByID,
+	getAllReservations,
 	getReservationsByID,
 	getReservationsByUser,
 	updateReservationByID,
 } from '../../services/teacher/reservationsRequest';
 import { useCallback } from 'react';
 import {
+	CreateReservationResponse,
 	Reservation,
 	ReservationSimple,
 } from '../../models/teacher/ReservationGetUser';
@@ -39,6 +42,22 @@ export const UseReservations = () => {
 		}
 	}, [user, page]);
 
+	const getAllReservationsData = useCallback(async () => {
+		let pageNumber = 0;
+		if (page) {
+			pageNumber = parseInt(page);
+		}
+		if (user) {
+			const { jwtToken } = user;
+			const reservationsResponse = await getAllReservations(
+				pageNumber,
+				jwtToken,
+			);
+			const reservations = reservationsResponse?.data.content;
+			return reservations;
+		}
+	}, [user, page]);
+
 	const getReservationId = useCallback(async () => {
 		if (user) {
 			const { jwtToken } = user;
@@ -52,7 +71,7 @@ export const UseReservations = () => {
 	}, [user, idNumber]);
 
 	const deleteReservation = useCallback(
-		async (id: number): Promise<boolean> => {
+		async (id: number | undefined): Promise<boolean> => {
 			if (user) {
 				const { jwtToken } = user;
 				return await deleteReservationByID(id, jwtToken);
@@ -132,11 +151,26 @@ export const UseReservations = () => {
 		[],
 	);
 
+	const createNewReservation = useCallback(
+		async (
+			reservationData: ReservationSimple,
+		): Promise<CreateReservationResponse | null> => {
+			if (user) {
+				const { jwtToken } = user;
+				return await createReservation(reservationData, jwtToken);
+			}
+			return null;
+		},
+		[user],
+	);
+
 	return {
 		getReservationTeacher,
 		getReservationId,
 		mergeConsecutiveReservations,
 		deleteReservation,
 		updateReservation,
+		getAllReservationsData,
+		createNewReservation,
 	};
 };

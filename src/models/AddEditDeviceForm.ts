@@ -1,10 +1,12 @@
+import { DeviceStatus } from './Device';
+
 export class AddEditDeviceForm {
   id: number;
   name: string;
   category: string;
   description: string;
   inventoryId?: number;
-  isAvailable: 'true' | 'false';
+  isAvailable: DeviceStatus;
 
   constructor(
     {
@@ -19,6 +21,6 @@ export class AddEditDeviceForm {
     this.name = name || '';
     this.category = category || '';
     this.description = description || '';
-    this.isAvailable = isAvailable || 'false';
+    this.isAvailable = isAvailable || 'UNDER_REPAIR';
   }
 }

@@ -28,7 +28,7 @@ export const Reservations: React.FC<DataReservationProps> = ({
 		mergeConsecutiveReservations,
 	} = UseReservations();
 
-	const handleEditReservation = (id: number) => {
+	const handleEditReservation = (id: number | undefined) => {
 		navigate(`/edit-reservation/${id ?? ''}`);
 	};
 
@@ -43,7 +43,7 @@ export const Reservations: React.FC<DataReservationProps> = ({
 
 	const prevReservationsRef = useRef<Reservation[] | null>(null);
 
-	const handleDeleteReservation = async (id: number) => {
+	const handleDeleteReservation = async (id: number | undefined) => {
 		try {
 			const isok = await deleteReservation(id);
 			if (setDataReserve && dataReservations && isok) {

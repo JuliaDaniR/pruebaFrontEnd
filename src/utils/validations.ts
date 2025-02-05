@@ -1,5 +1,6 @@
 import { UserRegister } from '../models/UserRegister';
 import { AdminPut } from '../models/admin/AdminGet';
+import { InstitutionGet } from '../models/admin/InstitutionGet';
 
 export const validateForm = ({
 	address,
@@ -103,6 +104,45 @@ export const validationFormAdminUpdate = ({
 		!/[!@#$%^&*]/.test(password)
 	) {
 		return 'La contraseña es obligatoria y debe tener al menos 8 caracteres, incluyendo letras, números y caracteres especiales';
+	}
+
+	return null;
+};
+
+export const validateFormInstitutionUpdate = ({
+	cue,
+	name,
+	educational_level,
+	address,
+	email,
+	phone,
+	website,
+}: InstitutionGet): string | null => {
+	if (!email?.trim() || !/\S+@\S+\.\S+/.test(email)) {
+		return 'El email es obligatorio y debe tener un formato válido';
+	}
+	if (!cue?.trim()) {
+		return 'El CUE es obligatorio';
+	}
+
+	if (!name?.trim()) {
+		return 'La institución es obligatoria';
+	}
+
+	if (!educational_level?.trim()) {
+		return 'El nivel educativo es obligatorio';
+	}
+
+	if (!address?.trim()) {
+		return 'La dirección es obligatoria';
+	}
+
+	if (!phone?.trim() || !/^\d+$/.test(phone)) {
+		return 'El teléfono es obligatorio y debe contener solo números';
+	}
+
+	if (website == ' ') {
+		return 'El sitio web debe tener un formato válido';
 	}
 
 	return null;

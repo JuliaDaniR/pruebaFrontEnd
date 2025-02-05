@@ -31,8 +31,7 @@ const SidebarFirstOptions = ({ optionClasses }: SidebarFirstOptionsProps) => {
 						<div
 							key={route.path}
 							className={optionClasses}
-							onClick={() => onClickRoute(route.path)}
-						>
+							onClick={() => onClickRoute(route.path)}>
 							{route.name}
 						</div>
 					);

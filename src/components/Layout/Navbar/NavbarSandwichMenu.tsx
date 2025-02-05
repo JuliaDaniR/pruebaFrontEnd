@@ -8,9 +8,7 @@ interface NavbarSandwichMenuProps {
 	onToggleMenu: (value: false) => void;
 }
 
-const optionClasses = `
-  border-b border-gray-400 text-black py-3 text-center
-`;
+const optionClasses = 'border-b border-gray-400 text-black py-3 text-center';
 
 const NavbarSandwichMenu = ({ onToggleMenu }: NavbarSandwichMenuProps) => {
 	const navigate = useNavigate();
@@ -29,7 +27,7 @@ const NavbarSandwichMenu = ({ onToggleMenu }: NavbarSandwichMenuProps) => {
 
 	getMenuRoutesForRoleUser({ onUpdateRoutes: handleRoleRoutesUpdate });
 	getMenuRoutes({
-		menuType: 'logged',
+		menuType: 'USER',
 		onUpdateRoutes: handleLoggedRoutesUpdate,
 	});
 
@@ -38,13 +36,14 @@ const NavbarSandwichMenu = ({ onToggleMenu }: NavbarSandwichMenuProps) => {
 	};
 	const onClickRoute = (path: string) => {
 		navigate(path);
+		onToggleMenu(false);
 	};
 
 	return (
 		<React.Fragment>
 			<div
 				className='
-          block absolute w-full top-0 left-0 bg-white z-10 flex flex-col justify-between items-center 
+          absolute w-full top-0 left-0 bg-white z-10 flex flex-col justify-between items-center 
           md:hidden
         '>
 				<div

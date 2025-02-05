@@ -6,7 +6,6 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { headersWithToken } from '../helpers/headersWithToken';
 import { Device } from '../models/Device';
 
-
 const DeviceService = () => {
 	// Custom Hooks
 	const getCurrentUser = useGetCurrentUser;
@@ -23,26 +22,26 @@ const DeviceService = () => {
 
 	const getAllDeviceRequestSize = 8;
 
-
 	// Effects
 	getCurrentUser({ onUpdateUser: handleUser });
 
 	return {
-		getAllDevices: async (page: number) => {
-			const url = `${PORT_SERVER}/resource`;
+		getAllDevices: async (page?: number) => {
+			const url = `${PORT_SERVER}/resource/allResources`;
 			if (!currentUser) throw new Error('Usuario no logueado');
 			const config: AxiosRequestConfig = {
 				...headersWithToken(currentUser.jwtToken),
 				params: {
-					page, size: getAllDeviceRequestSize
-				}
+					page,
+					size: getAllDeviceRequestSize,
+				},
 			};
 			const response = await axios.get(url, config);
-			return response.data;
+			return response.data.data;
 		},
 
 		getDeviceById: async (id: number) => {
-			const url = `${PORT_SERVER}/resource/${id}`;
+			const url = `${PORT_SERVER}/resource/getById/${id}`;
 			if (!currentUser) throw new Error('Usuario no logueado');
 			const config = headersWithToken(currentUser.jwtToken);
 			const response = await axios.get(url, config);
@@ -58,7 +57,7 @@ const DeviceService = () => {
 		},
 
 		updateDevice: async (device: Device) => {
-			const url = `${PORT_SERVER}/resource/${device.inventoryId}`;
+			const url = `${PORT_SERVER}/resource/update/${device.id}`;
 			const data = { ...device };
 			if (!currentUser) throw new Error('Usuario no logueado');
 			const config = headersWithToken(currentUser.jwtToken);
@@ -66,7 +65,7 @@ const DeviceService = () => {
 		},
 
 		deleteDeviceById: async (id: number) => {
-			const url = `${PORT_SERVER}/resource/${id}`;
+			const url = `${PORT_SERVER}/resource/delete/${id}`;
 			if (!currentUser) throw new Error('Usuario no Existente');
 			const config = headersWithToken(currentUser.jwtToken);
 			await axios.delete(url, config);

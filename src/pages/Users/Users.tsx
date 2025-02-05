@@ -14,6 +14,7 @@ const Users = () => {
 
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState<number>(0);
+  const [initialRender, setInitialRender] = useState<boolean>(true);
   const [areThereMore, setAreThereMore] = useState<boolean>(true);
 
   const getUsers = async () => {
@@ -46,6 +47,10 @@ const Users = () => {
 
 
   useEffect(() => {
+    if (initialRender) {
+      setInitialRender(false);
+      return;
+    }
     if (users.length === 0) {
       const initialize = async () => {
         const response = await userService.getAllUsers(0);
@@ -60,7 +65,7 @@ const Users = () => {
       }
       initialize();
     }
-  }, [userService, users]);
+  }, [userService, users, initialRender]);
 
 
   return (

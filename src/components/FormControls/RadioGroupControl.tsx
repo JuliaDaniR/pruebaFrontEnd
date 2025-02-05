@@ -1,7 +1,6 @@
 import { FieldErrors, FieldValues, Path, RegisterOptions, UseFormRegister } from 'react-hook-form';
 import { controlClasses } from './controlClasses'
 import { MultipleFormControlOption } from '../../helpers/MultipleFormControlOption';
-import clsx from 'clsx';
 
 interface RadioGroupControlProps<T extends FieldValues> {
   propertyName: Path<T>,
@@ -23,7 +22,6 @@ const RadioGroupControl = <T extends FieldValues>(
     errorContainerClasses,
   } = controlClasses;
 
-
   return (
     <div className={controlContainerClasses}>
       <div className={labelContainerClasses}>
@@ -34,14 +32,11 @@ const RadioGroupControl = <T extends FieldValues>(
       <div className='flex-1'>
         <div className={radioInputContainerClasses}>
           {
-            options.map((option, index) => {
+            options.map((option) => {
               return (
                 <div
                   key={option.value}
-                  className={clsx(
-                    'sm:flex sm:flex-1',
-                    index === 0 ? 'sm:pl-2' : '',
-                  )}
+                  className='sm:flex sm:flex-1'
                 >
                   <label className='
                     text-lg pr-1

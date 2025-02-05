@@ -10,40 +10,41 @@ import { AdminGet } from '../../models/admin/AdminGet';
 import { InstitutionGet } from '../../models/admin/InstitutionGet';
 
 const AdminDashboard: React.FC = () => {
-  const navigate = useNavigate();
-  const { user } = useAuthProvider();
+	const navigate = useNavigate();
+	const { user } = useAuthProvider();
 
-  const [admin, setAdmin] = useState<AdminGet | null>(null);
-  const [institution, setInstitution] = useState<InstitutionGet | null>(null);
+	const [admin, setAdmin] = useState<AdminGet | null>(null);
+	const [institution, setInstitution] = useState<InstitutionGet | null>(null);
 
-  useEffect(() => {
-    const fetchAdminAndInstitution = async () => {
-      if (user?.name && user?.jwtToken) {
-        // Obtener datos del administrador
-        const adminData = await getAdminData(user.name, user.jwtToken);
-        setAdmin(adminData);
+	useEffect(() => {
+		const fetchAdminAndInstitution = async () => {
+			if (user?.name && user?.jwtToken) {
+				const adminData = await getAdminData(user.name, user.jwtToken);
+				setAdmin(adminData);
 
-        // Obtener datos de la institución usando el CUE
-        if (adminData?.nameSchool) {
-          const institutionData = await getInstitutionData(adminData.nameSchool, user.jwtToken);
-          setInstitution(institutionData);
-        }
-      }
-    };
+				if (adminData?.nameSchool) {
+					const institutionData = await getInstitutionData(
+						adminData.nameSchool,
+						user.jwtToken,
+					);
+					setInstitution(institutionData);
+				}
+			}
+		};
 
-    fetchAdminAndInstitution();
-  }, [user?.name, user?.jwtToken]);
+		fetchAdminAndInstitution();
+	}, [user?.name, user?.jwtToken]);
 
-  return (
-    <React.Fragment>
-      <AdminHomeTitle>{institution?.name ?? 'Cargando...'}</AdminHomeTitle>
-      <AdminHomeData admin={admin} institution={institution} />
-      <AdminHomeButton
-        onClick={() => navigate('/edit-admin-profile')}
-        text="Editar Perfil"
-      />
-    </React.Fragment>
-  );
+	return (
+		<React.Fragment>
+			<AdminHomeTitle>{institution?.name ?? 'Cargando...'}</AdminHomeTitle>
+			<AdminHomeData admin={admin} institution={institution} />
+			<AdminHomeButton
+				onClick={() => navigate('/edit-admin-profile')}
+				text='Editar Perfil'
+			/>
+		</React.Fragment>
+	);
 };
 
 export { AdminDashboard };

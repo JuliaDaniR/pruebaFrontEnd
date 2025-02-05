@@ -18,7 +18,7 @@ const SidebarLastOptions = ({ optionClasses }: SidebarLastOptionsProps) => {
 		setRoutes(newRoutes);
 	};
 
-	getMenuRoutes({ onUpdateRoutes: handleRoutesUpdate, menuType: 'logged' });
+	getMenuRoutes({ onUpdateRoutes: handleRoutesUpdate, menuType: 'USER' });
 
 	const onClickRoute = (path: string) => {
 		navigate(path);

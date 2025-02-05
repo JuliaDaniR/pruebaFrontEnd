@@ -22,6 +22,7 @@ const AddEditUsers = () => {
 		formState: { errors },
 		reset,
 	} = useForm<AddEditUsersForm>();
+  const [initialRender, setInitialRender] = useState<boolean>(true);
 	const [userForm, setUserForm] = useState<AddEditUsersForm>({
 		...new AddEditUsersForm(),
 	});
@@ -58,6 +59,10 @@ const AddEditUsers = () => {
 
 	// Use effects
 	useEffect(() => {
+    if (initialRender) {
+      setInitialRender(false);
+      return;
+    }
 		const reFillingForm = async () => {
 			const user = await userService.getUserByDni({ dni: dni! });
 			setUserForm((prevForm) => {
@@ -85,7 +90,7 @@ const AddEditUsers = () => {
 		} else {
 			console.log('No hay dni');
 		}
-	}, [dni, userService]);
+	}, [dni, userService, initialRender]);
 
 	useEffect(() => {
 		if (userForm) {

@@ -10,7 +10,7 @@ export const updateAdminRequest = async (
 	token: string | undefined,
 ): Promise<void> => {
 	try {
-		await axios.put(`${PORT_SERVER}/user/update`, userData, {
+		await axios.patch(`${PORT_SERVER}/user/update`, userData, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},

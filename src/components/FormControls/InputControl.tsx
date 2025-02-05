@@ -54,4 +54,3 @@ const InputControl = <T extends FieldValues>(
 export {
   InputControl,
 }
-

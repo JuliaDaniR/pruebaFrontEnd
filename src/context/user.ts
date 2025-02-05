@@ -10,11 +10,14 @@ export interface AuthContextType {
 	isLoggedIn: boolean;
 	loginUser: (userData: UserCredentials) => Promise<LoginResponse>;
 	logout: () => void;
+	logoutIntentional: boolean | null;
 }
 
 export interface LoginResponse {
 	jwtToken: string;
 	name: string;
-	role: 'TEACHER' | 'USER' | 'ADMIN';
+	role: LoginRole;
 	dni: string;
 }
+
+export type LoginRole = 'TEACHER' | 'USER' | 'ADMIN' | 'LOGGED';

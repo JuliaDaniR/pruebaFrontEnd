@@ -4,7 +4,7 @@ import { AddEditDeviceForm } from '../../models/AddEditDeviceForm';
 import { RadioGroupControl } from '../../components/FormControls/RadioGroupControl';
 import { SelectControl } from '../../components/FormControls/SelectControl';
 import { deviceCategoriesOptions } from '../../helpers/deviceCategories';
-import { yesNoOptions } from '../../helpers/yesNoOptions';
+import { deviceStatusOptions } from '../../helpers/deviceStatusOptions';
 
 interface AddEditUsersInputsProps {
   register: UseFormRegister<AddEditDeviceForm>,
@@ -85,7 +85,7 @@ const AddEditDeviceInputs = (
         commonName='Disponible'
         errors={errors}
         registerOptions={availableRegisterOptions}
-        options={yesNoOptions}
+        options={deviceStatusOptions}
       />
     </>
   )

@@ -11,3 +11,4 @@ export interface User {
   role?: 'TEACHER' | 'ADMIN',
   nameSchool?: string,
 }
+
