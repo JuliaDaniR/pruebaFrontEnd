@@ -1,12 +1,21 @@
+import { CategoryType } from './CategoryType';
 import { MultipleFormControlOption } from './MultipleFormControlOption';
 
-export const deviceCategoriesOptions: MultipleFormControlOption[] = [
+export const deviceCategoriesOptions: MultipleFormControlOption<CategoryType>[] = [
   {
     commonName: 'Audiovisual',
     value: 'AUDIOVISUALS',
   },
   {
-    commonName: 'IT',
-    value: 'IT',
+    commonName: 'Salón',
+    value: 'CLASSROOM',
+  },
+  {
+    commonName: 'Material de Laboratorio',
+    value: 'LABORATORY_MATERIALS',
+  },
+  {
+    commonName: 'Maquetas',
+    value: 'MODELS',
   },
 ] as const;

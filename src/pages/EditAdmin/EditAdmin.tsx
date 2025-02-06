@@ -43,4 +43,3 @@ const EditAdmin: React.FC = () => {
 };
 
 export { EditAdmin };
-

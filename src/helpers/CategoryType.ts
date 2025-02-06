@@ -1,0 +1,1 @@
+export type CategoryType = 'AUDIOVISUALS' | 'LABORATORY_MATERIALS' | 'CLASSROOM' | 'MODELS';

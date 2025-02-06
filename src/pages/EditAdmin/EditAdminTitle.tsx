@@ -7,4 +7,3 @@ export const EditAdminTitle = ({ children }: { children: React.ReactNode }) => {
 		</>
 	);
 };
-

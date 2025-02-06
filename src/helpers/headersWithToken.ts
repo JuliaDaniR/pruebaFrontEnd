@@ -14,4 +14,3 @@ const headersWithToken = <T>(
 export {
   headersWithToken,
 }
-
